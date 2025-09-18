@@ -122,7 +122,7 @@ export function LoginForm() {
             htmlType="submit"
             className="w-full"
           >
-            Submit
+            Login
           </Button>
         </Form>
       </Card>
