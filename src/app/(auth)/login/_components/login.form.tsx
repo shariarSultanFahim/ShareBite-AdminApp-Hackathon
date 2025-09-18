@@ -26,7 +26,7 @@ export function LoginForm() {
 
     // Making the request
     const result = await signIn("credentials", {
-      username: values.email,
+      email: values.email,
       password: values.password,
       redirect: false,
     });
