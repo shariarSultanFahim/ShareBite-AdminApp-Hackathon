@@ -9,7 +9,7 @@ export default async function ProtectedHOC({
 }) {
   const session = await authSession();
   if (!session) {
-    redirect("/login", RedirectType.replace);
+    redirect("/", RedirectType.replace);
   }
   return <>{children}</>;
 }
