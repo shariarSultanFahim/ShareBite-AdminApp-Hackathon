@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 const { Item, ErrorList } = Form;
 
 export function LoginForm() {
+  const [messageApi, contextHolder] = message.useMessage();
   const { handleSubmit, control } = useForm<FormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -18,7 +19,7 @@ export function LoginForm() {
 
   async function onSubmit(values: FormValues) {
     // Clearing errors
-    message.open({
+    messageApi.open({
       type: "loading",
       content: "Signing in..",
       duration: 0,
@@ -31,10 +32,10 @@ export function LoginForm() {
       redirect: false,
     });
 
-    message.destroy();
+    messageApi.destroy();
 
     if (result?.error) {
-      message.error(result.error || "Failed to login. Please try again.");
+      messageApi.error(result.error || "Failed to login. Please try again.");
     } else {
       //redirect to dashboard page
       window.location.href = "/dashboard";
@@ -43,6 +44,8 @@ export function LoginForm() {
 
   return (
     <>
+      {" "}
+      {contextHolder}
       <div className="pb-10 text-center">
         <h1 className="pb-1 text-2xl font-bold">Welcome</h1>
         <p className="font-medium">Sign in with your credentials.</p>

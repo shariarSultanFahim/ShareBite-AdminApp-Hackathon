@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { signOut } from "next-auth/react";
+import { Database, PersonStanding } from "lucide-react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -35,15 +36,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           items={[
             {
               key: "1",
-              icon: <UserOutlined />,
+              icon: <Database />,
               label: "Dashboard",
               onClick: () => router.push("/dashboard"),
             },
             {
               key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "route1",
-              onClick: () => router.push("/dashboard/route1"),
+              icon: <UserOutlined />,
+              label: "Employee",
+              onClick: () => router.push("/dashboard/employee"),
             },
             {
               key: "3",

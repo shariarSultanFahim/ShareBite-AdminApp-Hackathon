@@ -3,17 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 import { JWT } from "next-auth/jwt";
 
-// import { loadEnv } from 'vite';
-// const env = loadEnv(process.env.NODE_ENV || 'local', process.cwd(), '');
-
 // config axios instance
 axios.defaults.baseURL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 interface IUser extends User {
-  accessToken?: string;
-  refreshToken?: string;
+  accessToken: string;
+  id: string;
 }
 
 const options: NextAuthOptions = {
@@ -50,12 +47,11 @@ const options: NextAuthOptions = {
           const res = await axios.post("/auth/login/", payload);
 
           if (res.data) {
-            const { access: accessToken, refresh: refreshToken } = res.data; // Destructure access and refresh tokens
+            const { access_token: accessToken } = res.data.data; // Destructure access and refresh tokens
 
             return {
-              id: credentials.email, // no user ID in this case, using email
+              id: "id",
               accessToken,
-              refreshToken,
             };
           } else {
             console.warn("Login failed with [Code: 200]:", res.data.error);
@@ -74,11 +70,11 @@ const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user: IUser }) {
-      if (user?.accessToken && user.refreshToken) {
+    async jwt({ token, user }: { token: JWT; user?: User | undefined }) {
+      if (user && "accessToken" in user && "id" in user) {
         // Store access and refresh tokens in the JWT token
-        token.accessToken = user.accessToken;
-        token.refreshToken = user.refreshToken;
+        token.accessToken = (user as IUser).accessToken;
+        token.id = (user as IUser).id;
       }
       return token;
     },
@@ -86,7 +82,7 @@ const options: NextAuthOptions = {
     async session({ session, token }: { session: any; token: JWT }) {
       // Store access and refresh tokens in the session for Axios requests
       session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
+      session.user = { id: token.id };
       return session;
     },
   },
