@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   AppstoreOutlined,
   BankOutlined,
@@ -22,6 +22,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const router = useRouter();
+  const pathname = usePathname();
 
   const signout = async () => {
     await signOut();
@@ -34,7 +35,16 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          selectedKeys={[
+            (() => {
+              const path = pathname || "";
+              if (path.startsWith("/dashboard/drop-requests")) return "2";
+              if (path.startsWith("/dashboard/hub")) return "3";
+              if (path.startsWith("/dashboard/employee")) return "4";
+              if (path === "/dashboard") return "1";
+              return "";
+            })(),
+          ]}
           items={[
             {
               key: "1",
