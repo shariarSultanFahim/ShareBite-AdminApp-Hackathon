@@ -3,14 +3,16 @@
 import React, { ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  AppstoreOutlined,
+  BankOutlined,
+  GiftOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  TeamOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { signOut } from "next-auth/react";
-import { Database, PersonStanding } from "lucide-react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -36,18 +38,30 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           items={[
             {
               key: "1",
-              icon: <Database />,
+              icon: <AppstoreOutlined />,
               label: "Dashboard",
               onClick: () => router.push("/dashboard"),
             },
             {
               key: "2",
-              icon: <UserOutlined />,
-              label: "Employee",
-              onClick: () => router.push("/dashboard/employee"),
+              icon: <GiftOutlined />,
+              label: "Drop Requests",
+              onClick: () => router.push("/dashboard/drop-requests"),
             },
             {
               key: "3",
+              icon: <BankOutlined />,
+              label: "Hub",
+              onClick: () => router.push("/dashboard/hub"),
+            },
+            {
+              key: "4",
+              icon: <TeamOutlined />,
+              label: "Employees",
+              onClick: () => router.push("/dashboard/employee"),
+            },
+            {
+              key: "5",
               icon: <UserOutlined />,
               label: "Logout",
               onClick: signout,
