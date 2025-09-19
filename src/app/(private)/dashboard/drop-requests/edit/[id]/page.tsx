@@ -1,14 +1,17 @@
 "use client";
+import { useGetDropDetails } from "@/lib/actions/drop-requests/drop.details";
 import { useParams } from "next/navigation";
+import { DropEditForm } from "./_components/drop.edit.form";
 
 export default function DropRequestsEdit() {
-  // Get the id from the params
-  // This assumes you are using the new app router (app directory)
-  // and this page is at /dashboard/drop-requests/edit/[id]/page.tsx
-  // If not, adjust accordingly.
-  // You can use useParams from 'next/navigation'
   const params = useParams();
   const id = params?.id;
+  const { data: dropDetails } = useGetDropDetails({ id: id as string });
+  const status = dropDetails?.data?.data?.results?.[0].status;
 
-  return <>edit page for id: {id}</>;
+  return (
+    <>
+      <DropEditForm status={status} id={id} />
+    </>
+  );
 }
